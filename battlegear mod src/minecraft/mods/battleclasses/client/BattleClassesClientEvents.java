@@ -336,11 +336,6 @@ public class BattleClassesClientEvents {
         	String firstLine = event.toolTip.get(0);
         	event.toolTip.clear();
         	event.toolTip.add(firstLine);
-        	/*
-        	for(int i = 1; i < event.toolTip.size(); ++i) {
-        		event.toolTip.remove(i);
-        	}
-        	*/
         	
         	//Add item specific info
         	event.toolTip.addAll(attributeProviderItem.getTooltipText());
@@ -395,14 +390,16 @@ public class BattleClassesClientEvents {
 					switch(mc.objectMouseOver.typeOfHit) {
 						case ENTITY: {
 							BattleClassesWeaponHitHandler weaponHitHandler = BattleClassesUtils.getPlayerWeaponHandler(mc.thePlayer);
-							if(!weaponHitHandler.mainHandClock.isOnCooldown()) {
+							if(!weaponHitHandler.mainHandAttackAbility.isOnCooldown()) {
+								System.out.println("MAIN");
 								//Can use mainhand
 								offhandNext = true;
 								return;
 							}
 							else {
 								event.setCanceled(true);
-								if(!weaponHitHandler.offHandClock.isOnCooldown()) {
+								System.out.println("OFF");
+								if(!weaponHitHandler.offHandAttackAbility.isOnCooldown()) {
 									//Can use offhand
 									weaponHitHandler.processOffhandAttack(mc.thePlayer, mc.objectMouseOver.entityHit);
 									offhandNext = false;
@@ -412,7 +409,6 @@ public class BattleClassesClientEvents {
 						}
 							break;
 						case MISS: {
-							System.out.println("Alter hands");
 							if(offhandNext) {
 								event.setCanceled(true);
 								((IBattlePlayer) mc.thePlayer).swingOffItem();

@@ -10,6 +10,7 @@ import mods.battleclasses.attributes.BattleClassesAttributeModifierBonus;
 import mods.battleclasses.attributes.BattleClassesAttributes;
 import mods.battleclasses.attributes.ICWAttributeModifier;
 import mods.battleclasses.attributes.AttributesFactory.WeaponDamageCreationMode;
+import mods.battleclasses.enums.EnumBattleClassesArmorSlot;
 import mods.battleclasses.enums.EnumBattleClassesAttributeType;
 import mods.battleclasses.enums.EnumBattleClassesItemRarity;
 import mods.battleclasses.enums.EnumBattleClassesPlayerClass;
@@ -29,9 +30,14 @@ public class BattleClassesItemHandheld extends ItemSword implements IBattleClass
 	}
 
 	protected EnumBattleClassesHandHeldType handHeldType = EnumBattleClassesHandHeldType.ONE_HANDED;
+	
 	@Override
 	public EnumBattleClassesHandHeldType getHeldType() {
 		return handHeldType;
+	}
+	
+	public void setHandHeldType(EnumBattleClassesHandHeldType handHeldType) {
+		this.handHeldType = handHeldType;
 	}
 
 	/*
@@ -42,10 +48,22 @@ public class BattleClassesItemHandheld extends ItemSword implements IBattleClass
 	}
 	*/
 	
-	public BattleClassesItemHandheld setItemLevelAndAttributeTypes(int itemLevel, EnumSet<EnumBattleClassesAttributeType> types, float weaponSpeed, WeaponDamageCreationMode weaponDamageMode) {
+	public String getTextureFolderName() {
+		return "handheld";
+	}
+	
+	public BattleClassesItemHandheld setName(String MODID, String parName) {
+		this.setUnlocalizedName(MODID +":" + this.getTextureFolderName() + "/" + parName);
+    	this.setTextureName(MODID + ":" + this.getTextureFolderName() + "/" + parName);
+    	return this;
+    }
+
+	
+	public BattleClassesItemHandheld setItemLevelAndAttributeTypes(int itemLevel, EnumSet<EnumBattleClassesAttributeType> types, EnumBattleClassesHandHeldType handHeldType) {
 		this.itemLevel = itemLevel;
+		this.handHeldType = handHeldType;
 		this.setMaxDamage(this.getDurability());
-		this.storedAttributes = AttributesFactory.createForHandheld(itemLevel, this.handHeldType, types, weaponSpeed, weaponDamageMode);
+		this.storedAttributes = AttributesFactory.createForHandheld(itemLevel, handHeldType, types, 0, WeaponDamageCreationMode.ZERO);
 		this.setSingleAttributeModifier(new BattleClassesAttributeModifierBonus(storedAttributes));
 		return this;
 	}
@@ -169,7 +187,7 @@ public class BattleClassesItemHandheld extends ItemSword implements IBattleClass
 	protected int itemLevel = 0;
 	protected EnumSet<EnumBattleClassesPlayerClass> classAccessSet = EnumSet.of(EnumBattleClassesPlayerClass.NONE);//EnumSet.noneOf(EnumBattleClassesPlayerClass.class);
 	protected BattleClassesAttributes storedAttributes = new BattleClassesAttributes();
-	protected List<ICWAttributeModifier> attributeModifiers;
+	protected List<ICWAttributeModifier> attributeModifiers = new ArrayList<ICWAttributeModifier>();
 
 	@Override
 	public List<ICWAttributeModifier> getAttributeModifiers() {
@@ -189,6 +207,10 @@ public class BattleClassesItemHandheld extends ItemSword implements IBattleClass
 	@Override
 	public BattleClassesAttributes getAttributes() {
 		return this.storedAttributes;
+	}
+	
+	public void setClassAccess(EnumSet<EnumBattleClassesPlayerClass> classAccessSet) {
+		this.classAccessSet = classAccessSet;
 	}
 	
 	@Override

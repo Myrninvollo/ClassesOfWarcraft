@@ -8,7 +8,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public enum EnumBattleClassesAbilitySchool {
-	PHYSICAL_MELEE_RAGE {
+	PHYSICAL_MELEE {
 		public float getCriticalStrikeChanceBase() {
 			return 0.10F;
 		}
@@ -24,9 +24,10 @@ public enum EnumBattleClassesAbilitySchool {
 
 		@Override
 		public float getPowerValueFromAttributes(BattleClassesAttributes attributes) {
-			return attributes.strength;
+			return attributes.melee_attack_damage;
 		}
 	},
+	/*
 	PHYSICAL_MELEE_ENERGY {
 		public float getCriticalStrikeChanceBase() {
 			return 0.10F;
@@ -46,6 +47,7 @@ public enum EnumBattleClassesAbilitySchool {
 			return attributes.agility;
 		}
 	},
+	*/
 	PHYSICAL_RANGED {
 		public float getCriticalStrikeChanceBase() {
 			return 0.10F;
@@ -66,7 +68,7 @@ public enum EnumBattleClassesAbilitySchool {
 
 		@Override
 		public float getPowerValueFromAttributes(BattleClassesAttributes attributes) {
-			return attributes.agility;
+			return attributes.ranged_attack_damage;
 		}
 	},
 	
@@ -283,6 +285,10 @@ public enum EnumBattleClassesAbilitySchool {
 	public boolean isMagical() {
     	return false;
     }
+	
+	public boolean isAffectedByArmorPenetration() {
+		return !this.isMagical();
+	}
 	
 	public boolean hasCastingSound() {
 		return false;

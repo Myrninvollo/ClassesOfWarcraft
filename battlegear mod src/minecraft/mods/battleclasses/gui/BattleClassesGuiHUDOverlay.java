@@ -138,10 +138,10 @@ public class BattleClassesGuiHUDOverlay extends BattlegearInGameGUI {
                 if(weaponHitHandler != null) {
                 	CooldownClock handClock;
                 	if(isMainHand) {
-                		handClock = weaponHitHandler.mainHandClock;
+                		handClock = weaponHitHandler.mainHandAttackAbility.getCooldownClock();
                 	}
                 	else {
-                		handClock = weaponHitHandler.offHandClock;
+                		handClock = weaponHitHandler.offHandAttackAbility.getCooldownClock();
                 	}
                 	BattleClassesGuiHelper.INSTANCE.drawCooldown(varx, y+3, BattleClassesUtils.getCooldownPercentage(handClock));
                 }
@@ -403,6 +403,7 @@ public class BattleClassesGuiHUDOverlay extends BattlegearInGameGUI {
     	}
     }
 	
+    /*
     public void drawCooldown(int posX, int posY, float f) {
     	if(f > 0) {
     		int frameIndex = BattleClassesGuiHelper.cooldownIcons.length-1;
@@ -427,6 +428,7 @@ public class BattleClassesGuiHUDOverlay extends BattlegearInGameGUI {
 	        GL11.glPopMatrix();
       	}
 	}
+	*/
     
 	 // 3.  You'll need to write your own version of the Gui.drawTexturedModalRect() method
 	//  This method can go into your own Gui class:

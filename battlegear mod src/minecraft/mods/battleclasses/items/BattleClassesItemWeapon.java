@@ -6,6 +6,9 @@ import java.util.List;
 
 import cpw.mods.fml.relauncher.Side;
 import mods.battleclasses.BattleClassesUtils;
+import mods.battleclasses.attributes.AttributesFactory;
+import mods.battleclasses.attributes.BattleClassesAttributeModifierBonus;
+import mods.battleclasses.attributes.AttributesFactory.WeaponDamageCreationMode;
 import mods.battleclasses.enums.EnumBattleClassesAttributeType;
 import mods.battleclasses.enums.EnumBattleClassesItemRarity;
 import mods.battleclasses.enums.EnumBattleClassesPlayerClass;
@@ -29,7 +32,6 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 public class BattleClassesItemWeapon extends BattleClassesItemHandheld implements IBattleClassesWeapon {
 	
 //	protected final ToolMaterial material;
-	protected EnumSet<EnumBattleClassesPlayerClass> classAccessSet;
 	protected String name;
 	protected float weaponSpeed = 0;
 	
@@ -37,11 +39,23 @@ public class BattleClassesItemWeapon extends BattleClassesItemHandheld implement
     	super();
 	}
     
+    public String getTextureFolderName() {
+		return "weapons";
+	}
+    
     protected void setName(String parName) {
     	this.name = parName;
     	this.setUnlocalizedName("battleclasses:"+"weapons/" + parName);
     	this.setTextureName("battleclasses:"+"weapons/" + parName);
     }
+    
+    public BattleClassesItemWeapon setItemLevelAndAttributeTypes(int itemLevel, EnumSet<EnumBattleClassesAttributeType> types, EnumBattleClassesHandHeldType handHeldType, float weaponSpeed, WeaponDamageCreationMode weaponDamageMode) {
+    	super.setItemLevelAndAttributeTypes(itemLevel, types, handHeldType);
+		this.weaponSpeed = weaponSpeed;
+		this.storedAttributes = AttributesFactory.createForHandheld(itemLevel, this.handHeldType, types, weaponSpeed, weaponDamageMode);
+		this.setSingleAttributeModifier(new BattleClassesAttributeModifierBonus(storedAttributes));
+		return this;
+	}
     
     /**
      * returns the action that specifies what animation to play when the items is being used
@@ -81,7 +95,7 @@ public class BattleClassesItemWeapon extends BattleClassesItemHandheld implement
     
 	@Override
 	public float getWeaponDamage() {
-		return this.storedAttributes.getValueByType(EnumBattleClassesAttributeType.WEAPON_DAMAGE);
+		return this.storedAttributes.getValueByType(EnumBattleClassesAttributeType.MELEE_ATTACK_DAMAGE);
 	}
 
 	@Override
@@ -103,7 +117,7 @@ public class BattleClassesItemWeapon extends BattleClassesItemHandheld implement
 		
 		float weaponDamage = this.getWeaponDamage();
 		if(weaponDamage > 0) {
-			text.add(BattleClassesGuiHelper.getTranslatedBonusLine(weaponDamage, EnumBattleClassesAttributeType.WEAPON_DAMAGE));
+			text.add(BattleClassesGuiHelper.getTranslatedBonusLine(weaponDamage, EnumBattleClassesAttributeType.MELEE_ATTACK_DAMAGE));
 		}
 		float bonusReach = this.getBonusReach();
 		if(bonusReach > 0) {

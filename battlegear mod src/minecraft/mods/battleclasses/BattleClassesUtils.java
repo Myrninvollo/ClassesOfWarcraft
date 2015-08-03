@@ -69,16 +69,23 @@ public static Logger battleClassesLogger = LogManager.getLogger("Battle Classes"
     	return false;
     }
 	
-	public static float getCurrentTimeInSeconds() {
-		return ((float) Minecraft.getSystemTime()) / 1000;
+	public static double getCurrentTimeInSeconds() {
+		return ((double) Minecraft.getSystemTime()) / 1000L;
 	}
+	
+	/*
+	private long getTime() {
+        return (System.nanoTime() / 1000000);
+        //return (Sys.getTime() * 1000) / Sys.getTimerResolution();
+    }
+    */
 	
 	public static float getCooldownPercentage(ICooldownOwner coolDownHolder) {
 		return getCooldownPercentage(coolDownHolder.getCooldownClock());
 	}
 	
 	public static float getCooldownPercentage(CooldownClock coolClock) {
-		return coolClock.getCooldownRemaining() / coolClock.getLastUsedDuration();
+		return (float) (coolClock.getRemainingDuration() / coolClock.getLastUsedDuration());
 	}
 	
 	public static void setEntityPlayerItemInUseInSeconds(EntityPlayer entityPlayer, ItemStack itemStack, float time) {
@@ -243,6 +250,17 @@ public static Logger battleClassesLogger = LogManager.getLogger("Battle Classes"
 	public static ItemStack getMainhandItemStack(EntityPlayer entityPlayer) {
 		//return BattleClassesUtils.getBattleInventory(entityPlayer).getStackInSlot(0 + InventoryPlayerBattle.OFFSET);
 		return BattleClassesUtils.getBattleInventory(entityPlayer).extraItems[0];
+	}
+	
+	public static ItemStack getMainhandItemHeld(EntityPlayer entityPlayer) {
+		return entityPlayer.getHeldItem();
+	}
+	
+	public static ItemStack getOffhandItemHeld(EntityPlayer entityPlayer) {
+		if(isPlayerInBattlemode(entityPlayer)) {
+			return getOffhandItemStack(entityPlayer);
+		}
+		return null;
 	}
 	
 	public static Potion getPotionByID(int potionID) {
